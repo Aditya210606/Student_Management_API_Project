@@ -1,0 +1,67 @@
+{
+    "S001": {
+        "student_id": "S001",
+        "first_name": "Aditya",
+        "last_name": "Mahtre",
+        "email": "user@example.com",
+        "phone_number": "9028594749",
+        "age": 17,
+        "gender": "Male",
+        "year": 1,
+        "cgpa": 10.0,
+        "city": "string",
+        "department": "AI&DS"
+    },
+    "S002": {
+        "student_id": "S002",
+        "first_name": "Rahul",
+        "last_name": "Sharma",
+        "email": "rahul.sharma@example.com",
+        "phone_number": "9876543210",
+        "age": 20,
+        "gender": "Male",
+        "year": 2,
+        "cgpa": 8.75,
+        "city": "Mumbai",
+        "department": "CSE"
+    },
+    "S004": {
+        "student_id": "S004",
+        "first_name": "Amit",
+        "last_name": "Verma",
+        "email": "amit.verma@example.com",
+        "phone_number": "9988776655",
+        "age": 19,
+        "gender": "Male",
+        "year": 1,
+        "cgpa": 8.21,
+        "city": "Nashik",
+        "department": "Civil"
+    },
+    "S005": {
+        "student_id": "S005",
+        "first_name": "Sneha",
+        "last_name": "Kulkarni",
+        "email": "sneha.kulkarni@example.com",
+        "phone_number": "9012345678",
+        "age": 20,
+        "gender": "Female",
+        "year": 3,
+        "cgpa": 9.56,
+        "city": "Thane",
+        "department": "EXTC"
+    },
+    "S006": {
+        "student_id": "S006",
+        "first_name": "Karan",
+        "last_name": "Joshi",
+        "email": "karan.joshi@example.com",
+        "phone_number": "9090909090",
+        "age": 22,
+        "gender": "Male",
+        "year": 4,
+        "cgpa": 8.93,
+        "city": "Nagpur",
+        "department": "Mechanical"
+    }
+}
