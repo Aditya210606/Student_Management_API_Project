@@ -21,8 +21,10 @@ def view_all_students_service():
     data = load_data()
 
     if data == {} :
+        
         return {'message :No students available'}
     return data
+
 
 def search_students_service(filters: StudentSearch = Depends()):
 
