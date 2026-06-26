@@ -208,5 +208,19 @@
         "cgpa": 9.28,
         "city": "Mumbai",
         "department": "AI&DS"
+    },
+    "S016": {
+        "student_id": "S016",
+        "first_name": "Sakshi",
+        "last_name": "Jain",
+        "email": "user@example.com",
+        "phone_number": "9028594649",
+        "age": 22,
+        "gender": "Female",
+        "Admission_year": 2024,
+        "year": 4,
+        "cgpa": 10.0,
+        "city": "Virar",
+        "department": "AI&DS"
     }
 }
