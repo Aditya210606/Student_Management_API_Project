@@ -1,6 +1,6 @@
-from fastapi import FastAPI, HTTPException, Path
+from fastapi import FastAPI, HTTPException, Path,Depends
 from fastapi.responses import JSONResponse
-from models import Student,UpdateStudent
+from models import Student,UpdateStudent,StudentResponse,StudentSearch
 from data import load_data, save_data
 
 app = FastAPI()
@@ -30,40 +30,124 @@ def view_all_students():
         return {'message :No students available'}
     return data
   
-# this is the endpoint for viewing a particular student detail
+@app.get("/students/search")
+def search_students(filters: StudentSearch = Depends()):
 
-@app.get('/students/{student_id}')
+    data = load_data()
+    result = []
+
+    # ---------------- Filtering ----------------
+
+    for student in data.values():
+
+        if filters.city is not None and student["city"] != filters.city:
+            continue
+
+        if filters.department is not None and student["department"] != filters.department:
+            continue
+
+        if filters.gender is not None and student["gender"] != filters.gender:
+            continue
+
+        if filters.year is not None and student["year"] != filters.year:
+            continue
+
+        if filters.admission_year is not None and student["admission_year"] != filters.admission_year:
+            continue
+
+        if filters.min_cgpa is not None and student["cgpa"] < filters.min_cgpa:
+            continue
+
+        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+            continue
+
+        if filters.student_id is not None and student["student_id"] != filters.student_id:
+            continue
+
+        if filters.first_name is not None and student["first_name"] != filters.first_name:
+            continue
+
+        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+            continue
+
+        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+            continue
+
+        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+            continue
+
+        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+            continue
+
+        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+            continue
+
+        result.append(student)
+
+    # ---------------- Sorting ----------------
+
+    if filters.sort_by is not None:
+
+        reverse = True if filters.sort_order == "desc" else False
+
+        result = sorted(
+            result,
+            key=lambda student: student[filters.sort_by],
+            reverse=reverse
+        )
+
+    # ---------------- Pagination ----------------
+
+    if filters.page is not None and filters.limit is not None:
+
+        start = (filters.page - 1) * filters.limit
+        end = start + filters.limit
+
+        result = result[start:end]
+
+    return result
+
+# this is the endpoint for viewing a particular student detail
+@app.get('/students/{student_id}',response_model=StudentResponse)
 def view_particular_student(student_id : str = Path(..., description='Student id of student', examples= ['S001'])):
 
     data = load_data()
 
     if student_id in data :
-        return data[student_id]
+
+     student = StudentResponse(**data[student_id])
+     return student
     raise HTTPException (status_code=404, detail='Student not found')
+
+    
     
 # endpoint for updating the student information
 
-@app.put('/students/{student_id}')
-def update_student_info(student_id:str , update_student : UpdateStudent):
+@app.put("/students/{student_id}")
+def update_student_info(student_id: str, update_student: UpdateStudent):
 
     data = load_data()
 
-    if student_id not in data :
-        raise HTTPException (status_code=404, detail={'message':'Student not found'})
+    if student_id not in data:
+        raise HTTPException(status_code=404, detail={"message": "Student not found"})
 
-    existing_student_info = data[student_id]      #current existing student data stored in existing student info
+    # Existing student data
+    existing_student_info = data[student_id]
 
-    updated_data = update_student.model_dump(exclude_unset=True)  #updated data is stored in updated_data and convert data into dictionary 
+    # Only include fields sent by the client
+    updated_data = update_student.model_dump(exclude_unset=True)
 
-    for key,value in updated_data.items():                # replaces the value of existing data from the updated data 
+    # Update existing data
+    for key, value in updated_data.items():
         existing_student_info[key] = value
 
-    student_pydantic_obj = Student(**existing_student_info)  # now the dictonary is stored in object to check the validation from student model
+    # Validate the final data
+    student_pydantic_obj = Student(**existing_student_info)
 
-    existing_student_info = student_pydantic_obj.model_dump()   # after checking the existing info is again stord in dict 
- 
-    data[student_id] = existing_student_info  # the data is stored in the specific student_id 
+    # Convert back to dictionary
+    data[student_id] = student_pydantic_obj.model_dump()
 
+    # Save to JSON
     save_data(data)
     
     return JSONResponse(status_code=200, content={'message':'Student info updated'})  # next the data is saved in the json file 
@@ -83,7 +167,6 @@ def delete_student(student_id : str):
     save_data(data)
 
     return JSONResponse(status_code=200, content={'message':'student deleted '})
-
 
 
 
