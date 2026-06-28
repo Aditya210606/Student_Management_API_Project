@@ -10,6 +10,10 @@ router = APIRouter(prefix="/students", tags=["Students"])
 def create_student(student: Student):
    return create_student_service(student)
 
+@router.get('/test')
+def test_error():
+    x = 10/0
+    return x
 
 # endpoint for viewing all the students in the students.json file 
 
@@ -38,7 +42,6 @@ def update_student_info(student_id: str, update_student: UpdateStudent):
 @router.delete('/{student_id}')
 def delete_student(student_id : str):
     return delete_student_service(student_id)
-
 
 
 
