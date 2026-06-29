@@ -7,12 +7,20 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from exceptions.handlers import http_exception_handler,request_validatorError_handler,generic_exception_handler
 from middleware.logging import log_request
+from core.config import settings
+from fastapi.middleware.cors import CORSMiddleware
 import time
 
-app =FastAPI()
+#settings
+app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
-# includes all the routes from the router file in the app 
-app.include_router(router)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # this are the methods to register the expections   
 app.add_exception_handler( HTTPException, http_exception_handler)
@@ -24,6 +32,8 @@ app.add_exception_handler(Exception, generic_exception_handler)
 app.middleware('http')(log_request)
 
 
+# includes all the routes from the router file in the app 
+app.include_router(router)
 
 
 
