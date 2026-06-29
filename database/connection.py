@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
-
 from core.config import settings
 
 DATABASE_URL = URL.create(

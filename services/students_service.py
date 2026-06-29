@@ -8,43 +8,39 @@ from models.student import Student as StudentModel
 from core.security import hash_password
 
 
+
 def create_student_service(student: Student, db: Session):
 
-    existing_student = (
-        db.query(StudentModel)
-        .filter(StudentModel.student_id == student.student_id)
-        .first()
-    )
+    existing_student = ( db.query(StudentModel).filter(StudentModel.student_id == student.student_id).first() )
 
     if existing_student:
-        raise HTTPException(
-            status_code=409,
-            detail="Student already exists"
-        )
+        raise HTTPException( status_code=409, detail="Student already exists" )
 
     new_student = StudentModel(
-        student_id=student.student_id,
-        first_name=student.first_name,
-        last_name=student.last_name,
-        email=student.email,
-        phone_number=student.phone_number,
-        password_hash=hash_password(student.password),
-        age=student.age,
-        gender=student.gender,
-        city=student.city,
-        department=student.department,
-        year=student.year,
-        cgpa=student.cgpa
-    )
+    student_id=student.student_id,
+    first_name=student.first_name,
+    last_name=student.last_name,
+    email=student.email,
+    phone_number=student.phone_number,
+    age=student.age,
+    gender=student.gender,
+    admission_year=student.admission_year,
+    year=student.year,
+    cgpa=student.cgpa,
+    city=student.city,
+    department=student.department,
+    password_hash=hash_password(student.password),
+    date_of_birth=student.date_of_birth,
+    address=student.address,
+    semester=student.semester
+)
 
     db.add(new_student)
     db.commit()
     db.refresh(new_student)
 
-    return JSONResponse(
-        status_code=201,
-        content={"message": "Student created successfully"}
-    )
+    return JSONResponse(status_code=201, content={"message": "Student created successfully"})
+
     # #data = load_data()
    
     # if student.student_id in db :
@@ -56,151 +52,276 @@ def create_student_service(student: Student, db: Session):
 
     # return JSONResponse(status_code=201,content={'message':'Student created successfully'})
 
-def view_all_students_service():
-    data = load_data()
+def view_all_students_service(db: Session):
+    #sql method 
+    students = db.query(StudentModel).all()
 
-    if data == {} :
-        
-        return {'message :No students available'}
-    return data
+    if not students :
+        raise HTTPException (status_code=404, detail='students not found')
+    return students 
 
+# json method 
+# data = load_data()
+#   if data =={}:
+#     raise HTTPException(status_code=404, detail='student not found')
 
-def search_students_service(filters: StudentSearch = Depends()):
+def view_particular_student_service(student_id : str, db: Session ):
 
-    data = load_data()
+    student = db.query(StudentModel).filter(StudentModel.student_id == student_id).first()
+    if not student :
+        raise HTTPException (status_code=404, detail='Student not found')    
+    
+    return student
 
-    total_students = len(data)
-    result = []
+def update_student_info_service( student_id: str, update_student: UpdateStudent,  db: Session):
+    # Find the student
+    student = db.query(StudentModel).filter(StudentModel.student_id == student_id).first()
+
+    if not student:
+        raise HTTPException(status_code=404, detail="Student not found")
+
+    # Get only the fields sent by the client
+    updated_data = update_student.model_dump(exclude_unset=True)
+
+    # Update only those fields
+    for key, value in updated_data.items():
+        setattr(student, key, value)
+
+    db.commit()
+    db.refresh(student)
+
+    return JSONResponse( status_code=200, content={"message": "Student updated successfully"})
+
+    #json method 
+    # data = load_data()
+
+    # if student_id not in data:
+    #     raise HTTPException(status_code=404, detail={"message": "Student not found"})
+
+    # # Existing student data
+    # existing_student_info = data[student_id]
+
+    # # Only include fields sent by the client
+    # updated_data = update_student.model_dump(exclude_unset=True)
+
+    # # Update existing data
+    # for key, value in updated_data.items():
+    #     existing_student_info[key] = value
+
+    # # Validate the final data
+    # student_pydantic_obj = Student(**existing_student_info)
+
+    # # Convert back to dictionary
+    # data[student_id] = student_pydantic_obj.model_dump()
+
+    # # Save to JSON
+    # save_data(data)
+    
+    # return JSONResponse(status_code=200, content={'message':'Student info updated'})  # next the data is saved in the json file    
+
+    
+def search_students_service(filters: StudentSearch, db: Session ):
+
+    # Total students before filtering
+    total_students = db.query(StudentModel).count()
+
+    # Base query
+    query = db.query(StudentModel)
 
     # ---------------- Filtering ----------------
 
-    for student in data.values():
+    if filters.student_id:
+        query = query.filter(StudentModel.student_id == filters.student_id)
 
-        if filters.city is not None and filter.city.lower() not in student["city"].lower():
-            continue
+    if filters.first_name:
+        query = query.filter( StudentModel.first_name.ilike(f"%{filters.first_name}%") )
 
-        if filters.department is not None and student["department"] != filters.department:
-            continue
+    if filters.last_name:
+        query = query.filter( StudentModel.last_name.ilike(f"%{filters.last_name}%") )
 
-        if filters.gender is not None and student["gender"] != filters.gender:
-            continue
+    if filters.email:
+        query = query.filter( StudentModel.email.ilike(f"%{filters.email}%") )
 
-        if filters.year is not None and student["year"] != filters.year:
-            continue
+    if filters.phone_number:
+        query = query.filter( StudentModel.phone_number == filters.phone_number )
 
-        if filters.admission_year is not None and student["admission_year"] != filters.admission_year:
-            continue
+    if filters.age is not None:
+        query = query.filter( StudentModel.age == filters.age)
 
-        if filters.min_cgpa is not None and student["cgpa"] < filters.min_cgpa:
-            continue
+    if filters.gender:
+        query = query.filter( StudentModel.gender == filters.gender )
 
-        if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
-            continue
+    if filters.city:
+        query = query.filter( StudentModel.city.ilike(f"%{filters.city}%") )
 
-        if filters.student_id is not None and student["student_id"] != filters.student_id:
-            continue
+    if filters.department:
+        query = query.filter( StudentModel.department == filters.department )
 
-        if filters.first_name is not None and filters.first_name.lower() not in student["first_name"].lower():
-            continue
+    if filters.year is not None:
+        query = query.filter( StudentModel.year == filters.year )
 
-        if filters.last_name is not None and filters.last_name.lower() not in student["last_name"].lower():
-            continue
+    if filters.admission_year is not None:
+        query = query.filter( StudentModel.admission_year == filters.admission_year )
 
-        if filters.email is not None and filters.email.lower() not in student["email"].lower():
-            continue
+    if filters.cgpa is not None:
+        query = query.filter( StudentModel.cgpa == filters.cgpa )
 
-        if filters.phone_number is not None and student["phone_number"] != filters.phone_number:
-            continue
+    if filters.min_cgpa is not None:
+        query = query.filter( StudentModel.cgpa >= filters.min_cgpa )
 
-        if filters.age is not None and student["age"] != filters.age:
-            continue
+    if filters.max_cgpa is not None:
+        query = query.filter( StudentModel.cgpa <= filters.max_cgpa )
 
-        if filters.cgpa is not None and student["cgpa"] != filters.cgpa:
-            continue
+    # Count after filtering
+    filtered_students = query.count()
 
-        result.append(student)
-
-    filtered_students = len(result)
-
-    
     # ---------------- Sorting ----------------
 
-    if filters.sort_by is not None:
+    if filters.sort_by:
 
-        reverse = True if filters.sort_order == "desc" else False
+        column = getattr(StudentModel, filters.sort_by)
 
-        result = sorted(
-            result,
-            key=lambda student: student[filters.sort_by],
-            reverse=reverse
-        )
-
+        if filters.sort_order == "desc":
+            query = query.order_by(column.desc())
+        else:
+            query = query.order_by(column.asc())
 
     # ---------------- Pagination ----------------
 
+    # page = None
+    # limit = None
+
     if filters.page is not None and filters.limit is not None:
 
-        start = (filters.page - 1) * filters.limit
-        end = start + filters.limit
+        page = filters.page
+        limit = filters.limit
 
-        result = result[start:end]
+        offset = (page - 1) * limit
 
-        return {
-            "total_students": total_students,
-            "filtered_students": filtered_students,
-            "page":filters.page,
-            "limit":filters.limit,
-            "student": result
-        }
-def view_particular_student_service(student_id : str = Path(..., description='Student id of student', examples= ['S001'])):
+        query = query.offset(offset).limit(limit)
 
-    data = load_data()
+    # Execute query
+    students = query.all()
 
-    if student_id in data :
+    return {
+        "total_students": total_students,
+        "filtered_students": filtered_students,
+        "page": page,
+        "limit": limit,
+        "students": students
+    }
 
-     student = StudentResponse(**data[student_id])
-     return student
-    raise HTTPException (status_code=404, detail='Student not found')    
+    # data = load_data()
+
+    # total_students = len(data)
+    # result = []
+
+    # # ---------------- Filtering ----------------
+
+    # for student in data.values():
+
+    #     if filters.city is not None and filter.city.lower() not in student["city"].lower():
+    #         continue
+
+    #     if filters.department is not None and student["department"] != filters.department:
+    #         continue
+
+    #     if filters.gender is not None and student["gender"] != filters.gender:
+    #         continue
+
+    #     if filters.year is not None and student["year"] != filters.year:
+    #         continue
+
+    #     if filters.admission_year is not None and student["admission_year"] != filters.admission_year:
+    #         continue
+
+    #     if filters.min_cgpa is not None and student["cgpa"] < filters.min_cgpa:
+    #         continue
+
+    #     if filters.max_cgpa is not None and student["cgpa"] > filters.max_cgpa:
+    #         continue
+
+    #     if filters.student_id is not None and student["student_id"] != filters.student_id:
+    #         continue
+
+    #     if filters.first_name is not None and filters.first_name.lower() not in student["first_name"].lower():
+    #         continue
+
+    #     if filters.last_name is not None and filters.last_name.lower() not in student["last_name"].lower():
+    #         continue
+
+    #     if filters.email is not None and filters.email.lower() not in student["email"].lower():
+    #         continue
+
+    #     if filters.phone_number is not None and student["phone_number"] != filters.phone_number:
+    #         continue
+
+    #     if filters.age is not None and student["age"] != filters.age:
+    #         continue
+
+    #     if filters.cgpa is not None and student["cgpa"] != filters.cgpa:
+    #         continue
+
+    #     result.append(student)
+
+    # filtered_students = len(result)
+
     
+    # # ---------------- Sorting ----------------
 
-def update_student_info_service(student_id: str, update_student: UpdateStudent):
+    # if filters.sort_by is not None:
 
-    data = load_data()
+    #     reverse = True if filters.sort_order == "desc" else False
 
-    if student_id not in data:
-        raise HTTPException(status_code=404, detail={"message": "Student not found"})
+    #     result = sorted(
+    #         result,
+    #         key=lambda student: student[filters.sort_by],
+    #         reverse=reverse
+    #     )
 
-    # Existing student data
-    existing_student_info = data[student_id]
 
-    # Only include fields sent by the client
-    updated_data = update_student.model_dump(exclude_unset=True)
+    # # ---------------- Pagination ----------------
 
-    # Update existing data
-    for key, value in updated_data.items():
-        existing_student_info[key] = value
+    # if filters.page is not None and filters.limit is not None:
 
-    # Validate the final data
-    student_pydantic_obj = Student(**existing_student_info)
+    #     start = (filters.page - 1) * filters.limit
+    #     end = start + filters.limit
 
-    # Convert back to dictionary
-    data[student_id] = student_pydantic_obj.model_dump()
+    #     result = result[start:end]
 
-    # Save to JSON
-    save_data(data)
+    #     return {
+    #         "total_students": total_students,
+    #         "filtered_students": filtered_students,
+    #         "page":filters.page,
+    #         "limit":filters.limit,
+    #         "student": result
+    #     }
+   
+
+
+  
+
+
+def delete_student_service(student_id : str, db: Session):
+
+    student = db.query(StudentModel).filter(StudentModel.student_id == student_id).first()
+
+    if not student :
+        raise HTTPException (status_code=404, detail="Student not found")
     
-    return JSONResponse(status_code=200, content={'message':'Student info updated'})  # next the data is saved in the json file    
+    db.delete(student)
+    db.commit()
 
-def delete_student_service(student_id : str):
+    return JSONResponse (status_code=200, content={'message':'Student deleted'})
 
-    data = load_data()
+    # data = load_data()
 
-    if student_id not in data :
-        raise HTTPException (status_code=404, detail={'message':'student not found'})
+    # if student_id not in data :
+    #     raise HTTPException (status_code=404, detail={'message':'student not found'})
     
-    del data[student_id]
+    # del data[student_id]
 
-    save_data(data)
+    # save_data(data)
 
-    return JSONResponse(status_code=200, content={'message':'student deleted '})
+    # return JSONResponse(status_code=200, content={'message':'student deleted '})
 

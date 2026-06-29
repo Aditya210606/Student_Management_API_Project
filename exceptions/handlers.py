@@ -8,8 +8,18 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 async def request_validatorError_handler(request:Request ,exc: RequestValidationError):
  return JSONResponse(status_code=422, content={"Success":False, "message":'Validation falied', "error":exc.errors() })
 
-async def generic_exception_handler(request:Request, exc: Exception):
- return JSONResponse(status_code=500, content={'success':False, 'message':'Internal server error'})
-    
+async def generic_exception_handler(request: Request, exc: Exception):
+    print(exc)          # Print the exception
+    import traceback
+    traceback.print_exc()   # Print the full traceback
+
+    return JSONResponse(
+        status_code=500,
+        content={
+            "success": False,
+            "message": "Internal server error",
+            "error": str(exc)
+        }
+    )
 
     

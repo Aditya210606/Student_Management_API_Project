@@ -16,7 +16,7 @@ class Student(BaseModel):
     cgpa : Annotated[float, Field(...,ge = 0, le = 10, description="CGPA in range 0 to 10")]
     city : Annotated[str, Field(...,description="City of student living", min_length=2,max_length=30)]
     department: Annotated[Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil" ], Field(...,description="Department of the student")]
-    password: Annotated[ str,Field(..., min_length=6, description="Student password")]
+    password_hash: Annotated[ str,Field(..., min_length=6, description="Student password")]
     date_of_birth: date
     address: Annotated[str, Field(..., min_length=3)]
     semester: Annotated[int,Field(..., ge=1, le=8)]
@@ -52,19 +52,22 @@ class Student(BaseModel):
 
 class UpdateStudent(BaseModel):  
 
-    student_id : Annotated[Optional[str], Field(description="Id of student",examples=["S001","S002"])]
-    first_name : Annotated[Optional[str], Field(description="Student's first name", min_length= 2, max_length=30)]
-    last_name :  Annotated[Optional[str], Field(description="Student's last name", min_length= 2, max_length=30)]
-    email : Annotated[Optional[EmailStr], Field(description="Student's email address")]
-    phone_number : Annotated[Optional[str], Field(min_length= 10, max_length= 10, description="Exactly 10 digit phone no.", examples=['9028594749'])]
-    age :Annotated[Optional[int], Field(ge = 17, le = 30,description="Age of the student")]
-    gender : Annotated[Optional[Literal["Male","Female","other"]], Field(description="Gender of the student")] 
-    Admission_year : Annotated[Optional[int] , Field(description='Year of admission')]
-    year : Annotated[Optional[Literal[1,2,3,4]], Field( description="Student year of study")]
-    cgpa : Annotated[Optional[float], Field(ge = 0, le = 10, description="CGPA in range 0 to 10")]
-    city : Annotated[Optional[str], Field(description="City of student living", min_length=2,max_length=30)]
-    department: Annotated[Optional[Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil" ]], Field(description="Department of the student")]  
-
+    student_id: Annotated[Optional[str], Field(description="Id of student", examples=["S001", "S002"])] = None
+    first_name: Annotated[Optional[str], Field(description="Student's first name", min_length=2, max_length=30)] = None
+    last_name: Annotated[Optional[str], Field(description="Student's last name", min_length=2, max_length=30)] = None
+    email: Annotated[Optional[EmailStr], Field(description="Student's email address")] = None
+    phone_number: Annotated[Optional[str], Field(min_length=10, max_length=10, description="Exactly 10 digit phone no.", examples=["9028594749"])] = None
+    age: Annotated[Optional[int], Field(ge=17, le=30, description="Age of the student")] = None
+    gender: Annotated[Optional[Literal["Male", "Female", "other"]], Field(description="Gender of the student")] = None
+    admission_year: Annotated[Optional[int], Field(description="Year of admission")] = None
+    year: Annotated[Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study")] = None
+    cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="CGPA in range 0 to 10")] = None
+    city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30)] = None
+    department: Annotated[ Optional[ Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"] ], Field(description="Department of the student")] = None
+    password_hash: Annotated[Optional[str], Field(min_length=6, description="Student password")] = None
+    date_of_birth: Optional[date] = None
+    address: Annotated[ Optional[str], Field(min_length=10)] = None
+    semester: Annotated[ Optional[int], Field(ge=1, le=8)]
 #-------------------------------------------------------------------------
 
 class StudentResponse(Student):
@@ -77,42 +80,33 @@ class StudentResponse(Student):
 
     return full_name
  
+  
+ 
  #--------------------------------------------------------------------------
 
 class StudentSearch(BaseModel):
 
- student_id: Annotated[Optional[str], Field(description="Id of student", examples=["S001", "S002"])] = None
-
- first_name: Annotated[Optional[str], Field(description="Student's first name", min_length=2, max_length=30)] = None
-
- last_name: Annotated[Optional[str], Field(description="Student's last name", min_length=2, max_length=30)] = None
-
- email: Annotated[Optional[EmailStr], Field(description="Student's email address")] = None
-
- phone_number: Annotated[Optional[str], Field(min_length=10, max_length=10, description="Exactly 10 digit phone no.", examples=["9028594749"])] = None
-
- age: Annotated[Optional[int], Field(ge=17, le=30, description="Age of the student")] = None
-
- gender: Annotated[Optional[Literal["Male", "Female", "other"]], Field(description="Gender of the student")] = None
-
- admission_year: Annotated[Optional[int], Field(description="Year of admission")] = None
-
- year: Annotated[Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study")] = None
-
- cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="CGPA in range 0 to 10")] = None
-
- city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30)] = None
-
- department: Annotated[Optional[Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"]], Field(description="Department of the student")] = None
-
- min_cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="Minimum CGPA")] = None
-
- max_cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="Maximum CGPA")] = None
-
- sort_by: Annotated[Optional[Literal["first_name", "last_name", "cgpa", "age", "year", "city"]], Field(description="Field used for sorting")] = None
-
- sort_order: Annotated[Optional[Literal["asc", "desc"]], Field(description="Sorting order")] = 'asc'
-
- page: Annotated[Optional[int], Field(ge=1, description="Page number")] = 1
-
- limit: Annotated[Optional[int], Field(ge=1, le=100, description="Records per page")] = 10
+    student_id: Annotated[ Optional[str],  Field(description="Id of student", examples=["S001", "S002"])] = None
+    first_name: Annotated[ Optional[str], Field(description="Student's first name", min_length=2, max_length=30)] = None
+    last_name: Annotated[ Optional[str], Field(description="Student's last name", min_length=2, max_length=30)] = None
+    email: Annotated[ Optional[EmailStr], Field(description="Student's email address")] = None
+    phone_number: Annotated[ Optional[str],Field( min_length=10, max_length=10, description="Exactly 10 digit phone no.", examples=["9028594749"])] = None
+    age: Annotated[Optional[int], Field(ge=17, le=30, description="Age of the student") ] = None
+    gender: Annotated[ Optional[Literal["Male", "Female", "other"]], Field(description="Gender of the student")] = None
+    admission_year: Annotated[ Optional[int], Field(description="Year of admission") ] = None
+    year: Annotated[ Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study") ] = None
+    cgpa: Annotated[ Optional[float],Field(ge=0, le=10, description="Exact CGPA") ] = None
+    city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30) ] = None
+    department: Annotated[Optional[ Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"  ] ], Field(description="Department of the student")] = None
+    date_of_birth: Optional[date] = None
+    address: Annotated[ Optional[str], Field(min_length=10, description="Student address")] = None
+    semester: Annotated[ Optional[int],Field(ge=1, le=8, description="Semester")] = None
+    # ---------- Range Filters ----------
+    min_cgpa: Annotated[ Optional[float],Field(ge=0, le=10, description="Minimum CGPA")] = None
+    max_cgpa: Annotated[ Optional[float],Field(ge=0, le=10, description="Maximum CGPA")] = None
+    # ---------- Sorting ---------
+    sort_by: Annotated[Optional[ Literal[ "first_name", "last_name","cgpa","age", "year", "city","admission_year","semester" ]],Field(description="Field used for sorting")] = None
+    sort_order: Annotated[ Optional[Literal["asc", "desc"]],Field(description="Sorting order")] = "asc"
+    # ---------- Pagination ----------
+    page: Annotated[  int, Field(ge=1, description="Page number") ] = 1
+    limit: Annotated[ int,Field(ge=1, le=100, description="Records per page")] = 10
