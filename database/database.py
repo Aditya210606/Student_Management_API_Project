@@ -1,5 +1,6 @@
 from database.base import Base
 from database.connection import engine
+
+#import all the database models here
 import models.student
 
-Base.metadata.create_all(bind=engine)

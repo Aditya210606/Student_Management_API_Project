@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import time
 from database.connection import engine
 from database.base import Base
-import database.database
+from database.database import *
 
 #settings
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
@@ -38,6 +38,7 @@ app.middleware('http')(log_request)
 # includes all the routes from the router file in the app 
 app.include_router(router)
 
+#This creates all the table in the database
 Base.metadata.create_all(bind=engine)
 
 
