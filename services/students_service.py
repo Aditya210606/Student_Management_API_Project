@@ -1,21 +1,60 @@
 from fastapi import HTTPException ,Depends, Path
 from fastapi.responses import JSONResponse
 
-from models import Student,StudentSearch,StudentResponse,UpdateStudent
+from schemas.students import Student,StudentSearch,StudentResponse,UpdateStudent
 from data import load_data, save_data
+from sqlalchemy.orm import Session
+from models.student import Student as StudentModel
+from core.security import hash_password
 
 
-def create_student_service(student: Student):
-    data = load_data()
+def create_student_service(student: Student, db: Session):
+
+    existing_student = (
+        db.query(StudentModel)
+        .filter(StudentModel.student_id == student.student_id)
+        .first()
+    )
+
+    if existing_student:
+        raise HTTPException(
+            status_code=409,
+            detail="Student already exists"
+        )
+
+    new_student = StudentModel(
+        student_id=student.student_id,
+        first_name=student.first_name,
+        last_name=student.last_name,
+        email=student.email,
+        phone_number=student.phone_number,
+        password_hash=hash_password(student.password),
+        age=student.age,
+        gender=student.gender,
+        city=student.city,
+        department=student.department,
+        year=student.year,
+        cgpa=student.cgpa
+    )
+
+    db.add(new_student)
+    db.commit()
+    db.refresh(new_student)
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Student created successfully"}
+    )
+    # #data = load_data()
    
-    if student.student_id in data :
-        raise HTTPException (status_code=409,detail="student already exist")
+    # if student.student_id in db :
+    #     raise HTTPException (status_code=409,detail="student already exist")
     
-    data[student.student_id] = student.model_dump()  #currently including the student_id in the data 
+    # db[student.student_id] = student.model_dump()  #currently including the student_id in the data 
 
-    save_data(data)
+    # #save_data(data)
 
-    return JSONResponse(status_code=201,content={'message':'Student created successfully'})
+    # return JSONResponse(status_code=201,content={'message':'Student created successfully'})
 
 def view_all_students_service():
     data = load_data()

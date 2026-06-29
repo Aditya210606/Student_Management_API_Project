@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Path,Depends
 from fastapi.responses import JSONResponse
-from models import Student,UpdateStudent,StudentResponse,StudentSearch
+from schemas.students import Student,UpdateStudent,StudentResponse,StudentSearch
 from data import load_data, save_data
 from routers.student import router
 from fastapi import FastAPI, HTTPException, Request
@@ -10,6 +10,9 @@ from middleware.logging import log_request
 from core.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 import time
+from database.connection import engine
+from database.base import Base
+import database.database
 
 #settings
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
@@ -34,6 +37,8 @@ app.middleware('http')(log_request)
 
 # includes all the routes from the router file in the app 
 app.include_router(router)
+
+Base.metadata.create_all(bind=engine)
 
 
 
