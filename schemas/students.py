@@ -110,3 +110,5 @@ class StudentSearch(BaseModel):
     # ---------- Pagination ----------
     page: Annotated[  int, Field(ge=1, description="Page number") ] = 1
     limit: Annotated[ int,Field(ge=1, le=100, description="Records per page")] = 10
+
+
