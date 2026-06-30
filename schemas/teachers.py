@@ -104,17 +104,29 @@ class TeacherSearch(BaseModel):
 
     city: Annotated[ Optional[str], Field(min_length=2, max_length=30, description="City") ] = None
 
-    address: Annotated[ Optional[str], Field(min_length=10, max_length=255, description="Address") ] = None
-
     department: Annotated[ Optional[ Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil", "Electronics", "Electrical" ] ], Field(description="Department")] = None
 
     designation: Annotated[ Optional[ Literal[ "Assistant Professor", "Associate Professor", "Professor", "Head of Department", "Dean", "Principal" ] ], Field(description="Teacher designation") ] = None
 
     qualification: Annotated[ Optional[ Literal[ "B.E", "B.Tech", "M.E", "M.Tech", "M.Sc", "PhD"  ] ], Field(description="Highest qualification")] = None
+    
+    salary: Annotated[Optional[int],Field(ge=10000, le=1000000,description="Salary of the teacher")] = None
 
-    date_of_birth: Optional[date] = None
+    min_salary: Annotated[Optional[int],Field(ge=10000, le=100000,description="Minimum salary of teacher")] = None
+
+    max_salary: Annotated[Optional[int],Field(ge=10000, le=100000,description="Maximum salary of teacher")] = None
+
+    experience: Annotated[Optional[int],Field(ge=0, le=50,description="Exact teaching experience in years")] = None
+
+    min_experience: Annotated [Optional[int], Field( ge=0,le=50, description="Minimum teaching experience in years")] = None
+
+    max_experience: Annotated[Optional[int], Field( ge=0,le=50, description="Maximum teaching experience in years")] = None
 
     date_of_joining: Optional[date] = None
+
+    joined_after: Optional[date] = None
+
+    joined_before: Optional[date] = None
 
     is_verified: Optional[bool] = None
 
