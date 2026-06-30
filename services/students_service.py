@@ -29,7 +29,7 @@ def create_student_service(student: Student, db: Session):
     cgpa=student.cgpa,
     city=student.city,
     department=student.department,
-    password_hash=hash_password(student.password),
+    password_hash=hash_password(student.password_hash),
     date_of_birth=student.date_of_birth,
     address=student.address,
     semester=student.semester

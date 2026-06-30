@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Path
 from fastapi.responses import JSONResponse
 from schemas.students import Student,StudentSearch,StudentResponse,UpdateStudent
-from data import load_data, save_data
+# from data import load_data, save_data
 from services.students_service import create_student_service,view_all_students_service,search_students_service,view_particular_student_service,update_student_info_service, delete_student_service
 from sqlalchemy.orm import Session
 from database.session import get_db

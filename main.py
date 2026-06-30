@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException, Path,Depends
 from fastapi.responses import JSONResponse
 from schemas.students import Student,UpdateStudent,StudentResponse,StudentSearch
 from data import load_data, save_data
-from routers.student import router
+from routers.student import router as studentrouter
+from routers.teacher import router as teacherrouter
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from exceptions.handlers import http_exception_handler,request_validatorError_handler,generic_exception_handler
@@ -36,7 +37,8 @@ app.middleware('http')(log_request)
 
 
 # includes all the routes from the router file in the app 
-app.include_router(router)
+app.include_router(studentrouter)
+app.include_router(teacherrouter)
 
 #This creates all the table in the database
 Base.metadata.create_all(bind=engine)
