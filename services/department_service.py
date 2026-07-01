@@ -156,15 +156,3 @@ def delete_department_service(department_id:str, db:Session):
     db.commit()
 
     return JSONResponse(status_code=200, content={'message':f" {department_id} department deleted"})
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,3 +6,4 @@ import models.student
 import models.teacher
 import models.department
 import models.subject
+import models.attendance
