@@ -7,3 +7,5 @@ import models.teacher
 import models.department
 import models.subject
 import models.attendance
+import models.marks
+import models.fees
