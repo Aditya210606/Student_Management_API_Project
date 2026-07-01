@@ -9,3 +9,5 @@ import models.subject
 import models.attendance
 import models.marks
 import models.fees
+import models.timetable
+import models.admin

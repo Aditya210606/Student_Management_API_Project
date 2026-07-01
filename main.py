@@ -9,6 +9,8 @@ from routers.subject import router as subjectrouter
 from routers.attendance import router as attendancerouter
 from routers.marks import router as marksrouter
 from routers.fees import router as feesrouter
+from routers.timetable import router as timetablerouter
+from routers.admin import router as adminrouter
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from exceptions.handlers import http_exception_handler,request_validatorError_handler,generic_exception_handler
@@ -49,6 +51,8 @@ app.include_router(subjectrouter)
 app.include_router(attendancerouter)
 app.include_router(marksrouter)
 app.include_router(feesrouter)
+app.include_router(timetablerouter)
+app.include_router(adminrouter)
 #This creates all the table in the database
 Base.metadata.create_all(bind=engine)
 

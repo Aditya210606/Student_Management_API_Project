@@ -1,0 +1,34 @@
+from sqlalchemy import String, Boolean, Date, DateTime
+from sqlalchemy.orm import Mapped, mapped_column
+from datetime import datetime, date
+
+from database.database import Base
+
+
+class AdminModel(Base):
+
+    __tablename__ = "admin"
+
+    admin_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+
+    first_name: Mapped[str] = mapped_column(String(30), nullable=False)
+
+    last_name: Mapped[str] = mapped_column(String(30), nullable=False)
+
+    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+
+    phone_number: Mapped[str] = mapped_column(String(10), unique=True, nullable=False)
+
+    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+
+    role: Mapped[str] = mapped_column(String(30), nullable=False)
+
+    date_of_joining: Mapped[date] = mapped_column(Date, nullable=False)
+
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+
+    profile_image: Mapped[str] = mapped_column( String(255), default="default_admin.png",nullable=False)
+
+    created_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, nullable=False)
+
+    updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
