@@ -5,6 +5,7 @@ from data import load_data, save_data
 from routers.student import router as studentrouter
 from routers.teacher import router as teacherrouter
 from routers.department import router as departmentrouter
+from routers.subject import router as subjectrouter
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from exceptions.handlers import http_exception_handler,request_validatorError_handler,generic_exception_handler
@@ -41,7 +42,7 @@ app.middleware('http')(log_request)
 app.include_router(studentrouter)
 app.include_router(teacherrouter)
 app.include_router(departmentrouter)
-
+app.include_router(subjectrouter)
 #This creates all the table in the database
 Base.metadata.create_all(bind=engine)
 

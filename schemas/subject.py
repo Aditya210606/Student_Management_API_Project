@@ -78,3 +78,22 @@ class SearchSubject(BaseModel):
     page: Annotated[ Optional[int], Field(ge=1, description="Page number")] = 1
 
     limit: Annotated[ Optional[int], Field(ge=1, le=100, description="Records per page")] = 10    
+
+
+
+class SubjectResponse(BaseModel):
+
+    subject_id: str
+    subject_name: str
+    subject_code: str
+    department: Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"]
+    semester: int
+    credits: int
+    subject_type: Literal["Theory", "Practical", "Theory + Practical"]
+    teacher_id: str
+    description: str
+    is_active: bool
+
+    model_config = {
+        "from_attributes": True
+    }
