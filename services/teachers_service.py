@@ -3,9 +3,10 @@ from models.teacher import TeacherModel
 from fastapi import HTTPException  
 from core.security import hash_password 
 from fastapi.responses import JSONResponse
-from schemas.teachers import UpdateTeacher,TeacherSearch
+from schemas.teachers import UpdateTeacher,TeacherSearch,Teacher
 
-def create_teacher_service(teacher:TeacherModel, db:Session):
+
+def create_teacher_service(teacher:Teacher, db:Session):
 
     existing_student =  db.query(TeacherModel).filter(TeacherModel.teacher_id == teacher.teacher_id).first() 
 
