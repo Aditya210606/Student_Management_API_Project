@@ -1,5 +1,5 @@
-from pydantic import BaseModel,Field,EmailStr, computed_field,field_validator,model_validator
-from typing import Annotated,Literal,Optional
+from pydantic import BaseModel, Field,EmailStr,field_validator,model_validator,computed_field
+from typing import Annotated ,Literal,Optional
 from datetime import date
 
 class Student(BaseModel):
@@ -15,7 +15,7 @@ class Student(BaseModel):
     year : Annotated[Literal[1,2,3,4], Field(..., description="Student year of study")]
     cgpa : Annotated[float, Field(...,ge = 0, le = 10, description="CGPA in range 0 to 10")]
     city : Annotated[str, Field(...,description="City of student living", min_length=2,max_length=30)]
-    department: Annotated[Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil" ], Field(...,description="Department of the student")]
+    department_id: Annotated[str, Field(..., examples=["D001"])] 
     password_hash: Annotated[ str,Field(..., min_length=6, description="Student password")]
     date_of_birth: date
     address: Annotated[str, Field(..., min_length=3)]

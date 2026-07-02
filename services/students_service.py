@@ -28,7 +28,7 @@ def create_student_service(student: Student, db: Session):
     year=student.year,
     cgpa=student.cgpa,
     city=student.city,
-    department=student.department,
+    department_id=student.department_id,
     password_hash=hash_password(student.password_hash),
     date_of_birth=student.date_of_birth,
     address=student.address,
@@ -68,8 +68,11 @@ def view_all_students_service(db: Session):
 def view_particular_student_service(student_id : str, db: Session ):
 
     student = db.query(StudentModel).filter(StudentModel.student_id == student_id).first()
+    print(student)
+
     if not student :
         raise HTTPException (status_code=404, detail='Student not found')    
+
     
     return student
 

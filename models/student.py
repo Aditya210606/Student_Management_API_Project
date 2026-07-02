@@ -1,7 +1,8 @@
 from datetime import date, datetime
-from sqlalchemy import (String,Integer,Float,Boolean,Date,DateTime,)
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String,Integer,Float,Boolean,Date,DateTime,ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from database.base import Base
+
 
 
 class Student(Base):
@@ -18,8 +19,8 @@ class Student(Base):
     date_of_birth: Mapped[date] = mapped_column( Date, nullable=False)
     city: Mapped[str] = mapped_column( String(50),nullable=False)
     address: Mapped[str] = mapped_column(String(255), nullable=False)
-    department: Mapped[str] = mapped_column( String(20), nullable=False)
     year: Mapped[int] = mapped_column( Integer, nullable=False)
+    department_id: Mapped[str] = mapped_column(ForeignKey("departments.department_id") , nullable=False)
     semester: Mapped[int] = mapped_column( Integer,nullable=False)
     admission_year: Mapped[int] = mapped_column( Integer, nullable=False)
     cgpa: Mapped[float] = mapped_column( Float, default=0.0)
@@ -29,3 +30,7 @@ class Student(Base):
     is_active: Mapped[bool] = mapped_column( Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow,)
     updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow,)
+
+
+     #relationship
+    department = relationship('DepartmentModel',back_populates="students")
