@@ -1,5 +1,5 @@
-from sqlalchemy import String, Integer, Time, Boolean, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Integer, Time, Boolean, DateTime,ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column,relationship
 from datetime import datetime, time
 
 from database.database import Base
@@ -38,3 +38,10 @@ class TimetableModel(Base):
     created_at: Mapped[datetime] = mapped_column( DateTime,default=datetime.utcnow, nullable=False )
 
     updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False )
+
+
+    department = relationship("DepartmentModel",back_populates="timetables")
+
+    subject = relationship("SubjectModel",back_populates="timetables")
+
+    teacher = relationship( "TeacherModel", back_populates="timetables")

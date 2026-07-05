@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Integer, Boolean,Date,DateTime
+from sqlalchemy.orm import Mapped, mapped_column,relationship
+from sqlalchemy import String, Integer, Boolean,Date,DateTime,ForeignKey
 from datetime import date,datetime
 from database.base import Base
 
@@ -9,11 +9,11 @@ class AttendanceModel(Base):
 
  attendance_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
 
- student_id: Mapped[str] = mapped_column(String(10), nullable=False)
+ student_id: Mapped[str] = mapped_column( ForeignKey("students.student_id"), nullable=False)
 
- subject_id: Mapped[str] = mapped_column(String(10), nullable=False)
+ subject_id: Mapped[str] = mapped_column(ForeignKey("subjects.subject_id"),nullable=False)
 
- teacher_id: Mapped[str] = mapped_column(String(10), nullable=False)
+ teacher_id: Mapped[str] = mapped_column( ForeignKey("teachers.teacher_id"), nullable=False)
 
  attendance_date: Mapped[date] = mapped_column(Date, nullable=False)
 
@@ -28,3 +28,9 @@ class AttendanceModel(Base):
  created_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, nullable=False)
 
  updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+ #relationship
+ students = relationship( "Student", back_populates="attendance")
+
+ 

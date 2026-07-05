@@ -1,5 +1,5 @@
-from sqlalchemy import String, Integer, Float, Date, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Integer, Float, Date, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column,relationship
 from datetime import datetime, date
 
 from database.database import Base
@@ -11,7 +11,7 @@ class FeesModel(Base):
 
     fee_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
 
-    student_id: Mapped[str] = mapped_column(String(10), nullable=False)
+    student_id: Mapped[str] = mapped_column(ForeignKey("students.student_id"), nullable=False)
 
     academic_year: Mapped[str] = mapped_column(String(20), nullable=False)
 
@@ -48,3 +48,6 @@ class FeesModel(Base):
     created_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, nullable=False)
 
     updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False )
+
+
+    students = relationship("Student", back_populates="fees")

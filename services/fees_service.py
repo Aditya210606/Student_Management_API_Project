@@ -151,6 +151,22 @@ def view_particular_fee_service(fee_id: str, db: Session):
 
     particular_fee = db.query(FeesModel).filter( FeesModel.fee_id == fee_id ).first()
 
+    print("Step 2")
+
+    print(particular_fee)
+
+    print("Step 3")
+
+    print(particular_fee.student_id)
+
+    print("Step 4")
+
+    print(particular_fee.students)
+
+    print("Step 5")
+
+    print(particular_fee.students.first_name)
+
     if not particular_fee:
         raise HTTPException(status_code=404, detail="Fee record not found")
 

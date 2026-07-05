@@ -111,6 +111,9 @@ def search_attendance_service(filters: SearchAttendance, db: Session):
 def view_particular_attendance_service(attendance_id: str, db: Session):
 
     particular_attendance = db.query(AttendanceModel).filter( AttendanceModel.attendance_id == attendance_id).first()
+    print(particular_attendance)
+    # print(particular_attendance.students.student_id)
+    print(particular_attendance.students.first_name)
 
     if not particular_attendance:
         raise HTTPException(status_code=404, detail="Attendance not found")

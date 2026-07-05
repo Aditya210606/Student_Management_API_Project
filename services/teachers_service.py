@@ -8,9 +8,9 @@ from schemas.teachers import UpdateTeacher,TeacherSearch,Teacher
 
 def create_teacher_service(teacher:Teacher, db:Session):
 
-    existing_student =  db.query(TeacherModel).filter(TeacherModel.teacher_id == teacher.teacher_id).first() 
+    existing_teacher =  db.query(TeacherModel).filter(TeacherModel.teacher_id == teacher.teacher_id).first() 
 
-    if existing_student:
+    if existing_teacher:
         raise HTTPException( status_code=409, detail="Student already exists" )
     
     new_teacher = TeacherModel(teacher_id=teacher.teacher_id,
@@ -24,7 +24,7 @@ def create_teacher_service(teacher:Teacher, db:Session):
     date_of_birth=teacher.date_of_birth,
     city=teacher.city,
     address=teacher.address,
-    department=teacher.department,
+    department_id=teacher.department_id,
     designation=teacher.designation,
     qualification=teacher.qualification,
     experience=teacher.experience,
@@ -44,7 +44,7 @@ def create_teacher_service(teacher:Teacher, db:Session):
 
 def view_all_teacher_service(db:Session):
     
-   teachers = db.query(TeacherModel).all()
+   teachers= db.query(TeacherModel).all()
 
    if not teachers:
        raise HTTPException(status_code=404, detail="Teachers not found")
@@ -84,8 +84,8 @@ def search_teacher_service(filters:TeacherSearch, db: Session):
     if filters.city:
         query = query.filter(TeacherModel.city.ilike(f"%{filters.city}%") )
 
-    if filters.department:
-        query = query.filter(TeacherModel.department == filters.department )
+    if filters.department_id:
+        query = query.filter(TeacherModel.department == filters.department.id )
 
     if filters.designation:
         query = query.filter( TeacherModel.designation == filters.designation )
@@ -164,11 +164,13 @@ def search_teacher_service(filters:TeacherSearch, db: Session):
 
 def view_particular_teacher_service(teacher_id : str , db:Session):
 
-    particular_teacher = db.query(TeacherModel).filter(TeacherModel.teacher_id==teacher_id).first()
+    teacher = db.query(TeacherModel).filter(TeacherModel.teacher_id==teacher_id).first()
+    print(teacher)
+    print(teacher.department.department_name)
 
-    if not particular_teacher :
+    if not teacher :
         raise HTTPException (status_code=404, detail="Teacher not found")
-    return particular_teacher
+    return teacher
 
 
 def update_teacher_info_service(teacher_id : str , update_teacher: UpdateTeacher,db:Session ):

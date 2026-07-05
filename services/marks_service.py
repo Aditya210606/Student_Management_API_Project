@@ -126,9 +126,11 @@ def search_marks_service(filters: SearchMarks, db: Session):
 
 def view_particular_marks_service(mark_id: str, db: Session):
 
-    particular_marks = db.query(MarksModel).filter(
-        MarksModel.mark_id == mark_id
-    ).first()
+    particular_marks = db.query(MarksModel).filter( MarksModel.mark_id == mark_id).first()
+
+    print(particular_marks.students.first_name)
+    print(particular_marks.subject.subject_name)
+    print(particular_marks.teacher.first_name)
 
     if not particular_marks:
         raise HTTPException(status_code=404, detail="Marks not found")
@@ -136,15 +138,9 @@ def view_particular_marks_service(mark_id: str, db: Session):
     return particular_marks
 
 
-def update_marks_info_service(
-    mark_id: str,
-    update_marks: UpdateMarks,
-    db: Session
-):
+def update_marks_info_service( mark_id: str, update_marks: UpdateMarks, db: Session):
 
-    existing_marks = db.query(MarksModel).filter(
-        MarksModel.mark_id == mark_id
-    ).first()
+    existing_marks = db.query(MarksModel).filter( MarksModel.mark_id == mark_id).first()
 
     if not existing_marks:
         raise HTTPException(status_code=404, detail="Marks not found")

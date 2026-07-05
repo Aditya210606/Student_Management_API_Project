@@ -63,7 +63,7 @@ class UpdateStudent(BaseModel):
     year: Annotated[Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study")] = None
     cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="CGPA in range 0 to 10")] = None
     city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30)] = None
-    department: Annotated[ Optional[ Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"] ], Field(description="Department of the student")] = None
+    department_id: Annotated[Optional[str], Field(..., examples=["D001"])] =None
     password_hash: Annotated[Optional[str], Field(min_length=6, description="Student password")] = None
     date_of_birth: Optional[date] = None
     address: Annotated[ Optional[str], Field(min_length=10)] = None
@@ -97,7 +97,7 @@ class StudentSearch(BaseModel):
     year: Annotated[ Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study") ] = None
     cgpa: Annotated[ Optional[float],Field(ge=0, le=10, description="Exact CGPA") ] = None
     city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30) ] = None
-    department: Annotated[Optional[ Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"  ] ], Field(description="Department of the student")] = None
+    department_id: Annotated[Optional[str], Field(..., examples=["D001"])] = None
     date_of_birth: Optional[date] = None
     address: Annotated[ Optional[str], Field(min_length=10, description="Student address")] = None
     semester: Annotated[ Optional[int],Field(ge=1, le=8, description="Semester")] = None

@@ -24,7 +24,7 @@ def create_subject_service(subjects: list[Subject], db: Session):
             subject_id=subject.subject_id,
             subject_name=subject.subject_name,
             subject_code=subject.subject_code,
-            department=subject.department,
+            department_id=subject.department_id,
             semester=subject.semester,
             credits=subject.credits,
             subject_type=subject.subject_type,
@@ -57,6 +57,10 @@ def view_all_subject_service(db:Session):
 def view_particular_subject_service(subject_id: str , db :Session):
 
     existing_subject = db.query(SubjectModel).filter(SubjectModel.subject_id == subject_id).first()
+
+    print(existing_subject.teacher.teacher_id)
+    print(existing_subject.teacher.first_name)
+    print(existing_subject.teacher.last_name)
 
     if not existing_subject:
         raise HTTPException(status_code=404, detail="Subject not found")
@@ -99,8 +103,8 @@ def search_subject_service(filters: SearchSubject, db: Session):
     if filters.subject_code is not None:
         query = query.filter( SubjectModel.subject_code.ilike(f"%{filters.subject_code}%") )
 
-    if filters.department is not None:
-        query = query.filter( SubjectModel.department == filters.department )
+    if filters.department_id is not None:
+        query = query.filter( SubjectModel.department == filters.department.id )
 
     if filters.semester is not None:
         query = query.filter( SubjectModel.semester == filters.semester)

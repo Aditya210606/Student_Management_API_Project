@@ -41,3 +41,9 @@ class DepartmentModel(Base):
 
 
     students = relationship("Student", back_populates="department")
+    teachers = relationship("TeacherModel",back_populates="department")
+    subjects = relationship("SubjectModel",back_populates="department")
+    timetables = relationship(
+    "TimetableModel",
+    back_populates="department"
+)

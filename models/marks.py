@@ -1,5 +1,5 @@
-from sqlalchemy import String, Integer, Float, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Integer, Float, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column,relationship
 from datetime import datetime
 
 from database.base import Base
@@ -11,11 +11,11 @@ class MarksModel(Base):
 
     mark_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
 
-    student_id: Mapped[str] = mapped_column(String(10), nullable=False)
+    student_id: Mapped[str] = mapped_column( ForeignKey("students.student_id"), nullable=False)
 
-    subject_id: Mapped[str] = mapped_column(String(10), nullable=False)
+    subject_id: Mapped[str] = mapped_column( ForeignKey("subjects.subject_id"), nullable=False)
 
-    teacher_id: Mapped[str] = mapped_column(String(10), nullable=False)
+    teacher_id: Mapped[str] = mapped_column( ForeignKey("teachers.teacher_id"), nullable=False)
 
     internal_marks: Mapped[float] = mapped_column(Float, nullable=False)
 
@@ -34,3 +34,10 @@ class MarksModel(Base):
     created_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, nullable=False)
 
     updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False )
+
+
+    students = relationship( "Student", back_populates="marks")
+
+    subject = relationship("SubjectModel", back_populates="marks")
+
+    teacher = relationship("TeacherModel",back_populates="marks")

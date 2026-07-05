@@ -27,7 +27,7 @@ class Teacher(BaseModel):
 
     address: Annotated[ str, Field( ..., min_length=10, max_length=255, description="Residential Address" ) ]
 
-    department: Annotated[ Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil",  "Electronics", "Electrical" ], Field( ...,description="Department") ]
+    department_id: Annotated[str, Field(..., examples=["D001"])]
 
     designation: Annotated[ Literal[ "Assistant Professor", "Associate Professor", "Professor", "Head of Department", "Dean", "Principal" ], Field( ..., description="Teacher designation" ) ]
 
@@ -71,8 +71,8 @@ class UpdateTeacher(BaseModel):
 
     address: Annotated[ Optional[str], Field( min_length=10, max_length=255, description="Residential Address" )] = None
 
-    department: Annotated[ Optional[ Literal[ "AI&DS", "CSE","IT", "EXTC" "Mechanical", "Civil", "Electronics","Electrical" ] ], Field(description="Department")] = None
-
+    department_id: Annotated[Optional[str], Field(..., examples=["D001"])] = None
+    
     designation: Annotated[ Optional[ Literal[ "Assistant Professor", "Associate Professor", "Professor", "Head of Department", "Dean", "Principal" ] ], Field(description="Teacher designation")] = None
 
     qualification: Annotated[ Optional[Literal[ "B.E", "B.Tech", "M.E", "M.Tech", "M.Sc", "PhD" ]], Field(description="Highest Qualification")] = None
@@ -104,7 +104,7 @@ class TeacherSearch(BaseModel):
 
     city: Annotated[ Optional[str], Field(min_length=2, max_length=30, description="City") ] = None
 
-    department: Annotated[ Optional[ Literal[ "AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil", "Electronics", "Electrical" ] ], Field(description="Department")] = None
+    department_id: Annotated[Optional[str], Field(..., examples=["D001"])] = None
 
     designation: Annotated[ Optional[ Literal[ "Assistant Professor", "Associate Professor", "Professor", "Head of Department", "Dean", "Principal" ] ], Field(description="Teacher designation") ] = None
 

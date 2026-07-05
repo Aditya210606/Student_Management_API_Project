@@ -8,7 +8,7 @@ from database.base import Base
 class Student(Base):
     __tablename__ = "students"
        
-    student_id: Mapped[str] = mapped_column(String(10), primary_key=True)
+    student_id: Mapped[str] = mapped_column(String(10), primary_key=True,index=True)
     first_name: Mapped[str] = mapped_column( String(30),nullable=False)
     last_name: Mapped[str] = mapped_column(String(30), nullable=False)
     email: Mapped[str] = mapped_column(String(100), unique=True,nullable=False)
@@ -34,3 +34,6 @@ class Student(Base):
 
      #relationship
     department = relationship('DepartmentModel',back_populates="students")
+    attendance = relationship("AttendanceModel",back_populates="students")
+    marks = relationship( "MarksModel",back_populates="students")
+    fees = relationship( "FeesModel",back_populates="students")

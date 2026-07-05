@@ -9,7 +9,7 @@ class Subject(BaseModel):
 
     subject_code: Annotated[str, Field(..., min_length=2, max_length=20, description="Subject code", examples=["CS301"])]
 
-    department: Annotated[ Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"], Field(..., description="Department offering the subject")]
+    department_id: Annotated[str,Field(...,description='department id', examples=['D001'])]
 
     semester: Annotated[int, Field(..., ge=1, le=8, description="Semester")]
 
@@ -33,7 +33,7 @@ class UpdateSubject(BaseModel):
 
     subject_code: Annotated[Optional[str], Field(min_length=2, max_length=20, description="Subject code", examples=["CS301"])] = None
 
-    department: Annotated[ Optional[Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"]], Field(description="Department offering the subject")] = None
+    department_id: Annotated[Optional[str],Field(...,description='department id', examples=['D001'])] = None
 
     semester: Annotated[Optional[int], Field(ge=1, le=8, description="Semester")] = None
 
@@ -57,7 +57,7 @@ class SearchSubject(BaseModel):
 
     subject_code: Annotated[Optional[str], Field(description="Subject code")] = None
 
-    department: Annotated[Optional[Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"]], Field(description="Department") ] = None
+    department_id: Annotated[Optional[str],Field(...,description='department id', examples=['D001'])]= None
 
     semester: Annotated[  Optional[int],  Field(ge=1, le=8, description="Semester") ] = None
 
@@ -86,7 +86,7 @@ class SubjectResponse(BaseModel):
     subject_id: str
     subject_name: str
     subject_code: str
-    department: Literal["AI&DS", "CSE", "IT", "EXTC", "Mechanical", "Civil"]
+    department_id: str
     semester: int
     credits: int
     subject_type: Literal["Theory", "Practical", "Theory + Practical"]

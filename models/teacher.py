@@ -1,6 +1,6 @@
 from datetime import date, datetime
-from sqlalchemy import String, Integer, Float, Boolean, Date, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Integer, Float, Boolean, Date, DateTime,ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column,relationship
 from database.base import Base
 
 
@@ -30,7 +30,7 @@ class TeacherModel(Base):
 
     address: Mapped[str] = mapped_column( String(255), nullable=False)
 
-    department: Mapped[str] = mapped_column( String(30), nullable=False )
+    department_id: Mapped[str] = mapped_column( ForeignKey("departments.department_id"), nullable=False )
 
     designation: Mapped[str] = mapped_column( String(50), nullable=False)
 
@@ -50,4 +50,18 @@ class TeacherModel(Base):
 
     created_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, nullable=False )
 
-    updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)    
+
+
+    #relationship
+    department = relationship("DepartmentModel",back_populates="teachers")
+    subjects = relationship("SubjectModel",back_populates="teacher")
+    marks = relationship(
+    "MarksModel",
+    back_populates="teacher"
+)
+    
+    timetables = relationship(
+    "TimetableModel",
+    back_populates="teacher"
+)

@@ -2,7 +2,6 @@ from fastapi import HTTPException ,Depends, Path
 from fastapi.responses import JSONResponse
 
 from schemas.students import Student,StudentSearch,StudentResponse,UpdateStudent
-from data import load_data, save_data
 from sqlalchemy.orm import Session
 from models.student import Student as StudentModel
 from core.security import hash_password
@@ -69,6 +68,8 @@ def view_particular_student_service(student_id : str, db: Session ):
 
     student = db.query(StudentModel).filter(StudentModel.student_id == student_id).first()
     print(student)
+    print(student.department)
+    print(student.department.department_name)
 
     if not student :
         raise HTTPException (status_code=404, detail='Student not found')    
@@ -157,8 +158,8 @@ def search_students_service(filters: StudentSearch, db: Session ):
     if filters.city:
         query = query.filter( StudentModel.city.ilike(f"%{filters.city}%") )
 
-    if filters.department:
-        query = query.filter( StudentModel.department == filters.department )
+    if filters.department_id:
+        query = query.filter( StudentModel.department == filters.department_id )
 
     if filters.year is not None:
         query = query.filter( StudentModel.year == filters.year )
