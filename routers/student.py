@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, Path
 from fastapi.responses import JSONResponse
 from schemas.students import Student,StudentSearch,StudentResponse,UpdateStudent
 # from data import load_data, save_data
-from services.students_service import create_student_service,view_all_students_service,search_students_service,view_particular_student_service,update_student_info_service, delete_student_service
+from services.students_service import create_student_service,view_all_students_service,search_students_service,view_particular_student_service,update_student_info_service, delete_student_service,student_department_info
 from sqlalchemy.orm import Session
 from database.session import get_db
 router = APIRouter(prefix="/students", tags=["Students"])
@@ -21,6 +21,10 @@ def view_all_students( db : Session = Depends(get_db)):
 @router.get("/search")
 def search_students(filters: StudentSearch = Depends(), db : Session =Depends(get_db)):
     return search_students_service(filters,db)
+
+@router.get('/report')
+def student_report(db :Session = Depends(get_db)):
+    return student_department_info(db)
 
     
 # this is the endpoint for viewing a particular student detail
