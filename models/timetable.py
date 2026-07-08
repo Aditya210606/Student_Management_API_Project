@@ -11,15 +11,15 @@ class TimetableModel(Base):
 
     timetable_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
 
-    department: Mapped[str] = mapped_column(String(30), nullable=False)
+    department_id: Mapped[str] = mapped_column( ForeignKey("departments.department_id"), nullable=False)
 
     semester: Mapped[int] = mapped_column(Integer, nullable=False)
 
     section: Mapped[str] = mapped_column(String(5), nullable=False)
 
-    subject_id: Mapped[str] = mapped_column(String(10), nullable=False)
+    subject_id: Mapped[str] = mapped_column(ForeignKey("subjects.subject_id"), nullable=False)
 
-    teacher_id: Mapped[str] = mapped_column(String(10), nullable=False)
+    teacher_id: Mapped[str] = mapped_column(ForeignKey("teachers.teacher_id"), nullable=False)
 
     day: Mapped[str] = mapped_column(String(15), nullable=False)
 
