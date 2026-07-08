@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from schemas.students import Student,StudentSearch,StudentResponse,UpdateStudent
 from sqlalchemy.orm import Session
 from models.student import Student as StudentModel
+from models.department import DepartmentModel
 from core.security import hash_password
 
 
@@ -329,3 +330,8 @@ def delete_student_service(student_id : str, db: Session):
 
     # return JSONResponse(status_code=200, content={'message':'student deleted '})
 
+def student_department_info (db :Session):
+
+   student =  db.query(StudentModel.first_name,StudentModel.last_name,DepartmentModel.department_name).join(DepartmentModel).all()
+
+   return student
