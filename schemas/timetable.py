@@ -7,7 +7,7 @@ class Timetable(BaseModel):
 
     timetable_id: Annotated[str, Field(..., description="Timetable ID", examples=["TT001"])]
 
-    department: Annotated[Literal["AI&DS", "CSE", "IT", "Mechanical", "Civil", "EXTC"], Field(..., description="Department")]
+    department_id: Annotated[str, Field(...,description="department id", examples=['D001'])]
 
     semester: Annotated[int, Field(..., ge=1, le=8, description="Semester")]
 
@@ -36,7 +36,7 @@ class UpdateTimetable(BaseModel):
 
     timetable_id: Annotated[Optional[str], Field(description="Timetable ID", examples=["TT001"])] = None
 
-    department: Annotated[Optional[Literal["AI&DS", "CSE", "IT", "Mechanical", "Civil", "EXTC"]], Field(description="Department")] = None
+    department_id: Annotated[Optional[str], Field(description="department_id")] = None
 
     semester: Annotated[Optional[int], Field(ge=1, le=8, description="Semester")] = None
 
@@ -66,7 +66,7 @@ class SearchTimetable(BaseModel):
 
     timetable_id: Annotated[Optional[str], Field(description="Timetable ID")] = None
 
-    department: Annotated[Optional[Literal["AI&DS", "CSE", "IT", "Mechanical", "Civil", "EXTC"]], Field(description="Department")] = None
+    department_id: Annotated[Optional[str], Field(description="department_id")] = None
 
     semester: Annotated[Optional[int], Field(ge=1, le=8, description="Semester")] = None
 
@@ -124,7 +124,7 @@ from datetime import time
 class TimetableResponse(BaseModel):
 
     timetable_id: str
-    department: Literal["AI&DS", "CSE", "IT", "Mechanical", "Civil", "EXTC"]
+    department_id: str
     semester: int
     section: Literal["A", "B", "C"]
     subject_id: str
