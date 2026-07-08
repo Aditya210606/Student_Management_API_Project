@@ -17,7 +17,7 @@ def create_timetable_service(timetable: Timetable, db: Session):
     # Create SQLAlchemy object
     new_timetable = TimetableModel(
         timetable_id=timetable.timetable_id,
-        department=timetable.department,
+        department_id=timetable.department_id,
         semester=timetable.semester,
         section=timetable.section,
         subject_id=timetable.subject_id,
@@ -137,6 +137,14 @@ def view_particular_timetable_service(timetable_id: str, db: Session):
 
     if not particular_timetable:
         raise HTTPException(status_code=404, detail="Timetable not found")
+    
+    print("Department object:", particular_timetable.department)
+    print("Subject object:", particular_timetable.subject)
+    print("Teacher object:", particular_timetable.teacher)
+
+    print("Department name:", particular_timetable.department.department_name)
+    print("Subject name:", particular_timetable.subject.subject_name)
+    print("Teacher name:", particular_timetable.teacher.first_name)
 
     return particular_timetable
 
