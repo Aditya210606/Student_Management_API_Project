@@ -134,7 +134,7 @@ def search_timetable_service(filters: SearchTimetable, db: Session):
 def view_particular_timetable_service(timetable_id: str, db: Session):
 
     particular_timetable = db.query(TimetableModel).filter( TimetableModel.timetable_id == timetable_id ).first()
-
+    
     if not particular_timetable:
         raise HTTPException(status_code=404, detail="Timetable not found")
     
