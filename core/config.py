@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     DB_USER:str
     DB_PASSWORD:str
 
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+
     model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 
 settings = Settings()
