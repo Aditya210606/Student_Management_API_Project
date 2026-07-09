@@ -16,7 +16,7 @@ class Student(BaseModel):
     cgpa : Annotated[float, Field(...,ge = 0, le = 10, description="CGPA in range 0 to 10")]
     city : Annotated[str, Field(...,description="City of student living", min_length=2,max_length=30)]
     department_id: Annotated[str, Field(..., examples=["D001"])] 
-    password_hash: Annotated[ str,Field(..., min_length=6, description="Student password")]
+    password: Annotated[ str,Field(..., min_length=6, description="Student password")]
     date_of_birth: date
     address: Annotated[str, Field(..., min_length=3)]
     semester: Annotated[int,Field(..., ge=1, le=8)]
@@ -64,7 +64,7 @@ class UpdateStudent(BaseModel):
     cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="CGPA in range 0 to 10")] = None
     city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30)] = None
     department_id: Annotated[Optional[str], Field(..., examples=["D001"])] =None
-    password_hash: Annotated[Optional[str], Field(min_length=6, description="Student password")] = None
+    password: Optional[str] = None
     date_of_birth: Optional[date] = None
     address: Annotated[ Optional[str], Field(min_length=10)] = None
     semester: Annotated[ Optional[int], Field(ge=1, le=8)]
