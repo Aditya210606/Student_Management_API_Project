@@ -29,7 +29,7 @@ def create_student_service(student: Student, db: Session):
     cgpa=student.cgpa,
     city=student.city,
     department_id=student.department_id,
-    password_hash=hash_password(student.password_hash),
+    password_hash=hash_password(student.password),
     date_of_birth=student.date_of_birth,
     address=student.address,
     semester=student.semester
@@ -87,6 +87,9 @@ def update_student_info_service( student_id: str, update_student: UpdateStudent,
 
     # Get only the fields sent by the client
     updated_data = update_student.model_dump(exclude_unset=True)
+
+    # if "password" in updated_data:
+    #  updated_data["password_hash"] = hash_password(updated_data.pop("password"))
 
     # Update only those fields
     for key, value in updated_data.items():
