@@ -31,3 +31,10 @@ def create_access_token(data: dict):
     )
 
     return encoded_jwt
+
+
+token = create_access_token(
+    data={"sub": "S001"}
+)
+
+print(token)
