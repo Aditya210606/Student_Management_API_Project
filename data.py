@@ -8,4 +8,4 @@ def load_data():
 
 def save_data(data):
  with open('students.json', 'w') as file :
-    json.dump(data,file,indent=2)    
+    json.dump(data,file,indent=4)    
