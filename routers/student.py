@@ -1,15 +1,18 @@
 from fastapi import APIRouter, HTTPException, Depends, Path
 from fastapi.responses import JSONResponse
 from schemas.students import Student,StudentSearch,StudentResponse,UpdateStudent
+from dependencies.permissions import admin_required
 # from data import load_data, save_data
 from services.students_service import create_student_service,view_all_students_service,search_students_service,view_particular_student_service,update_student_info_service, delete_student_service,student_department_info
 from sqlalchemy.orm import Session
 from database.session import get_db
 router = APIRouter(prefix="/students", tags=["Students"])
 
+from dependencies.permissions import admin_required
+
 @router.post("/create")
-def create_student(student: Student , db :Session = Depends(get_db)):
-   return create_student_service(student, db)
+def create_student(student: Student,db: Session = Depends(get_db), current_user=Depends(admin_required)):
+    return create_student_service(student, db)
 
 # endpoint for viewing all the students in the students.json file 
 
