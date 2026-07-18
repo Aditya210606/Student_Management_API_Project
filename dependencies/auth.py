@@ -8,7 +8,10 @@ from database.session import get_db
 from models.student import Student as StudentModel
 
 
-def get_current_student( token: str = Depends(oauth2_scheme),db: Session = Depends(get_db)):
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db)
+):
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -29,12 +32,6 @@ def get_current_student( token: str = Depends(oauth2_scheme),db: Session = Depen
         if student_id is None or role is None:
             raise credentials_exception
 
-        if role != "student":
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Student access required"
-            )
-
     except JWTError:
         raise credentials_exception
 
@@ -45,4 +42,7 @@ def get_current_student( token: str = Depends(oauth2_scheme),db: Session = Depen
     if student is None:
         raise credentials_exception
 
-    return student
+    return {
+        "user": student,
+        "role": role
+    }
