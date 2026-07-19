@@ -60,7 +60,7 @@ class UpdateStudent(BaseModel):
     age: Annotated[Optional[int], Field(ge=17, le=30, description="Age of the student")] = None
     gender: Annotated[Optional[Literal["Male", "Female", "other"]], Field(description="Gender of the student")] = None
     admission_year: Annotated[Optional[int], Field(description="Year of admission")] = None
-    year: Annotated[Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study")] = None
+    year: Annotated[Optional[Literal[1, 2, 3, 4]], Field(description="Student year of study in engineering")] = None
     cgpa: Annotated[Optional[float], Field(ge=0, le=10, description="CGPA in range 0 to 10")] = None
     city: Annotated[Optional[str], Field(description="City of student living", min_length=2, max_length=30)] = None
     department_id: Annotated[Optional[str], Field(..., examples=["D001"])] =None
