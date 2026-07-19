@@ -52,7 +52,7 @@ class Student(BaseModel):
 
 class UpdateStudent(BaseModel):  
 
-    student_id: Annotated[Optional[str], Field(description="Id of student", examples=["S001", "S002"])] = None
+    student_id: Annotated[Optional[str], Field(description="Id of students", examples=["S001", "S002"])] = None
     first_name: Annotated[Optional[str], Field(description="Student's first name", min_length=2, max_length=30)] = None
     last_name: Annotated[Optional[str], Field(description="Student's last name", min_length=2, max_length=30)] = None
     email: Annotated[Optional[EmailStr], Field(description="Student's email address")] = None
