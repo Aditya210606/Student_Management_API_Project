@@ -13,7 +13,7 @@ class Subject(BaseModel):
 
     semester: Annotated[int, Field(..., ge=1, le=8, description="Semester")]
 
-    credits: Annotated[int, Field(..., ge=1, le=10, description="Subject credits")]
+    credits: Annotated[int, Field(..., ge=1, le=10, description="Per Subject credits")]
 
     subject_type: Annotated[ Literal["Theory", "Practical", "Theory + Practical"], Field(..., description="Type of subject")]
 
