@@ -1,7 +1,6 @@
 from sqlalchemy import String, Integer, Float, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column,relationship
 from datetime import datetime
-
 from database.base import Base
 
 
@@ -34,7 +33,6 @@ class MarksModel(Base):
     created_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, nullable=False)
 
     updated_at: Mapped[datetime] = mapped_column( DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False )
-
 
     students = relationship( "Student", back_populates="marks")
 
