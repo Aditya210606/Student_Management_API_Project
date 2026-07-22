@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List
-
 from database.session import get_db
 from schemas.admin import Admin, SearchAdmin, UpdateAdmin, AdminResponse
 from services.admin_service import create_admin_service, search_admin_service, view_all_admin_service, view_particular_admin_service, update_admin_info_service, delete_admin_service
