@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column,relationship
 from sqlalchemy import String, Integer, Boolean,Date,DateTime,ForeignKey
 from datetime import date,datetime
+
 from database.base import Base
 
 class AttendanceModel(Base):
