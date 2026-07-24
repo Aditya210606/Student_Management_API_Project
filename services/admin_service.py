@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from models.admin import AdminModel
 from schemas.admin import Admin, UpdateAdmin, SearchAdmin
+from core.security import hash_password
 
 
 def create_admin_service(admin: Admin, db: Session):
@@ -20,7 +21,7 @@ def create_admin_service(admin: Admin, db: Session):
         last_name=admin.last_name,
         email=admin.email,
         phone_number=admin.phone_number,
-        password_hash=admin.password_hash,
+        password_hash=hash_password(admin.password),
         role=admin.role,
         date_of_joining=admin.date_of_joining,
         is_active=admin.is_active,
