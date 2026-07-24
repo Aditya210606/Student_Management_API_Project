@@ -1,21 +1,19 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-
+from models.admin import AdminModel
 from models.student import Student as StudentModel
-from schemas.auth import StudentLogin
+from schemas.auth import StudentLogin,AdminLogin
 from core.security import verify_password, create_access_token
 
 
 def student_login_service(form_data, db: Session):
 
-    student = db.query(StudentModel).filter(
-        StudentModel.email == form_data.username
-    ).first()
+    student = db.query(StudentModel).filter(StudentModel.email == form_data.username).first()
 
     if not student:
         raise HTTPException( status_code=401,detail="Invalid credentials" )
 
-    if not verify_password(form_data.password,student.password_hash):
+    if not verify_password(form_data.password, student.password_hash):
         raise HTTPException( status_code=401, detail="Invalid credentials")
 
     access_token = create_access_token( {"sub": student.student_id,"role":"student"})
@@ -24,3 +22,17 @@ def student_login_service(form_data, db: Session):
         "access_token": access_token,
         "token_type": "bearer"
     }
+
+def admin_login_service(form_data, db:Session):
+
+    admin = db.query(AdminModel).filter(AdminModel.email == form_data.username).first()
+
+    if not admin :
+        raise HTTPException(status_code=401,detail="Invalid credentials")
+
+    if not verify_password(form_data.password, admin.password_hash):
+        raise HTTPException( status_code=401, detail="Invalid credentials")
+
+    access_token = create_access_token({'sub':admin.admin_id,'role':"admin"})
+
+    return {"access token": access_token, "token type": "bearer"}
