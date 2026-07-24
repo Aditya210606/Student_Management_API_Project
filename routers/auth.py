@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from database.session import get_db
 from schemas.auth import StudentLogin
-from services.auth_service import student_login_service
+from services.auth_service import student_login_service,admin_login_service
 from dependencies.auth import get_current_user
 from models.student import Student as StudentModel
 from fastapi.security import OAuth2PasswordRequestForm
@@ -24,3 +24,7 @@ def get_student_profile(current_student: StudentModel = Depends(get_current_user
         "last_name": current_student.last_name,
         "email": current_student.email
     }
+
+@router.post("/admin/login")
+def admin_login(form_data :OAuth2PasswordRequestForm = Depends(),db:Session = Depends(get_db)):
+    return admin_login_service(form_data,db)
