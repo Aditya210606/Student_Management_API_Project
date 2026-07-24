@@ -15,7 +15,7 @@ class Admin(BaseModel):
 
     phone_number: Annotated[str, Field(..., min_length=10, max_length=10, description="Phone Number")]
 
-    password_hash: Annotated[str, Field(..., min_length=8, max_length=255, description="Password")]
+    password: Annotated[str, Field(..., min_length=8, max_length=255, description="Password")]
 
     role: Annotated[ Literal["Super Admin", "Admin", "Academic Admin", "Accounts Admin"], Field(..., description="Admin Role")]
 
@@ -37,7 +37,7 @@ class UpdateAdmin(BaseModel):
 
     phone_number: Annotated[Optional[str], Field(min_length=10, max_length=10, description="Phone Number")] = None
 
-    password_hash: Annotated[Optional[str], Field(min_length=8, max_length=255, description="Password")] = None
+    password: Annotated[Optional[str], Field(min_length=8, max_length=255, description="Password")] = None
 
     role: Annotated[ Optional[Literal["Super Admin", "Admin", "Academic Admin", "Accounts Admin"]], Field(description="Admin Role")] = None
 
@@ -96,7 +96,7 @@ class AdminResponse(BaseModel):
     last_name: str
     email: str
     phone_number: str
-    password_hash: str
+    password: str
     role: Literal["Super Admin", "Admin", "Academic Admin", "Accounts Admin"]
     date_of_joining: date
     is_active: bool
