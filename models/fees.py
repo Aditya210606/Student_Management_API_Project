@@ -8,7 +8,7 @@ class FeesModel(Base):
 
     __tablename__ = "fees"
 
-    fee_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+    fee_id: Mapped[str] = mapped_column(String(5), primary_key=True, index=True)
 
     student_id: Mapped[str] = mapped_column(ForeignKey("students.student_id"), nullable=False)
 
