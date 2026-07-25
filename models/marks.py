@@ -8,7 +8,7 @@ class MarksModel(Base):
 
     __tablename__ = "marks"
 
-    mark_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+    mark_id: Mapped[str] = mapped_column(String(5), primary_key=True, index=True)
 
     student_id: Mapped[str] = mapped_column( ForeignKey("students.student_id"), nullable=False)
 
