@@ -8,7 +8,7 @@ class DepartmentModel(Base):
 
     __tablename__ = "departments"
 
-    department_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+    department_id: Mapped[str] = mapped_column(String(5), primary_key=True, index=True)
 
     department_name: Mapped[str] = mapped_column(String(100), nullable=False)
 
