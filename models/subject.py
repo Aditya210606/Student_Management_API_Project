@@ -7,7 +7,7 @@ class SubjectModel(Base):
 
     __tablename__ = "subjects"
 
-    subject_id: Mapped[str] = mapped_column(  String(10),primary_key=True, index=True)
+    subject_id: Mapped[str] = mapped_column(  String(5),primary_key=True, index=True)
 
     subject_name: Mapped[str] = mapped_column(String(100), nullable=False)
 
