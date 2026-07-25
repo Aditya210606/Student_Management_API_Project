@@ -8,7 +8,7 @@ class TimetableModel(Base):
 
     __tablename__ = "timetable"
 
-    timetable_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+    timetable_id: Mapped[str] = mapped_column(String(5), primary_key=True, index=True)
 
     department_id: Mapped[str] = mapped_column( ForeignKey("departments.department_id"), nullable=False)
 
