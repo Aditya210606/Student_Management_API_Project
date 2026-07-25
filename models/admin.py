@@ -8,7 +8,7 @@ class AdminModel(Base):
 
     __tablename__ = "admin"
 
-    admin_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+    admin_id: Mapped[str] = mapped_column(String(5), primary_key=True, index=True)
 
     first_name: Mapped[str] = mapped_column(String(30), nullable=False)
 
