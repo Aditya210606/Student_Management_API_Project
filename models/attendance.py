@@ -8,7 +8,7 @@ class AttendanceModel(Base):
  
  __tablename__ = "attendance"
 
- attendance_id: Mapped[str] = mapped_column(String(10), primary_key=True, index=True)
+ attendance_id: Mapped[str] = mapped_column(String(5), primary_key=True, index=True)
 
  student_id: Mapped[str] = mapped_column( ForeignKey("students.student_id"), nullable=False)
 
