@@ -8,7 +8,7 @@ from database.base import Base
 class Student(Base):
     __tablename__ = "students"
        
-    student_id: Mapped[str] = mapped_column(String(10), primary_key=True,index=True)
+    student_id: Mapped[str] = mapped_column(String(5), primary_key=True,index=True)
 
     first_name: Mapped[str] = mapped_column( String(30),nullable=False)
 
