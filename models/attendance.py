@@ -3,7 +3,6 @@ from sqlalchemy import String, Integer, Boolean,Date,DateTime,ForeignKey
 from datetime import date,datetime
 
 from database.base import Base
-
 class AttendanceModel(Base):
  
  __tablename__ = "attendance"
