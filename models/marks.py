@@ -3,7 +3,6 @@ from sqlalchemy.orm import Mapped, mapped_column,relationship
 from datetime import datetime
 from database.base import Base
 
-
 class MarksModel(Base):
 
     __tablename__ = "marks"
